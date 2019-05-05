@@ -13,7 +13,7 @@ export default {
     }
   },
   created () {
-    console.log(process.env.NODE_ENV, 123)
+    console.log(this.baseUrl, 123)
   }
 }
 </script>
