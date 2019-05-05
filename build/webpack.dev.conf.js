@@ -2,6 +2,7 @@
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
+const appConfig = require('../config/apps')
 const merge = require('webpack-merge')
 const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
@@ -52,11 +53,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    }),
+    // 注释掉;
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: 'index.html',
+    //   inject: true
+    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {
@@ -67,6 +69,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     ])
   ]
 })
+// 新增;
+for (let key in appConfig) {
+  let temp = {
+    title: '',
+    inject: true
+  }
+  devWebpackConfig.plugins.push(new HtmlWebpackPlugin(Object.assign(appConfig[key], temp)));
+}
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port

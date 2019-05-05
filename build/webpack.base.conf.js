@@ -3,9 +3,19 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+// 引入config/apps，配置多页面;
+const appConfig = require('../config/apps')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
+}
+// 新增多页面配置;
+function getEntry() {
+  let entry = {}
+  for (let key in appConfig) {
+    entry[key] = './' +appConfig[key].entry
+  }
+  return entry
 }
 
 const createLintingRule = () => ({
@@ -21,9 +31,7 @@ const createLintingRule = () => ({
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    app: './src/main.js'
-  },
+  entry: getEntry(),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
